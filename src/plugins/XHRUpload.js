@@ -346,6 +346,16 @@ module.exports = class XHRUpload extends Plugin {
       const method = this.opts.method
 
       const formData = new FormData()
+
+      const meta = this.uppy.getState().meta
+      const metaFields = Array.isArray(this.opts.metaFields)
+        ? this.opts.metaFields
+        // Send along all fields by default.
+        : Object.keys(meta)
+      metaFields.forEach((item) => {
+        formPost.append(item, meta[item])
+      })
+
       files.forEach((file, i) => {
         const opts = this.getOptions(file)
         formData.append(opts.fieldName, file.data)
